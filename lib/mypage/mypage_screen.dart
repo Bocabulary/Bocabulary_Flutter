@@ -191,10 +191,10 @@ class _MypageScreenState extends State<MypageScreen> {
             const Spacer(),
             Switch(
               value: MyApp.themeNotifier.value == ThemeMode.light,
-              onChanged: (isLightMode) {
+              onChanged: (_isLightMode) {
                 setState(() {
                   MyApp.themeNotifier.value =
-                  isLightMode ? ThemeMode.light : ThemeMode.dark;
+                  _isLightMode ? ThemeMode.light : ThemeMode.dark;
                 });
               },
             ),
