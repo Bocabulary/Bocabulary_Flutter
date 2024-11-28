@@ -73,12 +73,14 @@ class _MypageScreenState extends State<MypageScreen> {
             imageProfile(),
             SizedBox(height: 20),
             nameText(),
-            const Divider(
+            Divider(
               height: 44,
               thickness: 1,
               indent: 24,
               endIndent: 24,
-              color: Colors.black12,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black45 // 라이트 모드일 때
+                  : Colors.white54,
             ),
             imageButton(),
             SizedBox(height: 20),
