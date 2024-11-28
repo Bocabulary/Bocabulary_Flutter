@@ -9,7 +9,7 @@ void main() async {
   runApp(
     MaterialApp(
 
-      home: MypageScreen(),
+      home: MyApp(),
       // home: HomeScreen(),
     )
   );

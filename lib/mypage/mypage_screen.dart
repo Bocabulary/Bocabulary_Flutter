@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           title: "북어사전",
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
+          debugShowCheckedModeBanner: false,
           themeMode: themeMode,
           home: const MypageScreen(),
         );
@@ -37,15 +38,13 @@ class MypageScreen extends StatefulWidget{
   @override
   State<MypageScreen> createState() => _MypageScreenState();
 
-  static final ValueNotifier<ThemeMode> themeNotifier =
-      ValueNotifier(ThemeMode.dark);
 
 }
 
 class _MypageScreenState extends State<MypageScreen> {
   XFile? _imageFile;
 
-  bool _isLightMode = true;
+  bool _isLightMode = false;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -106,7 +105,7 @@ class _MypageScreenState extends State<MypageScreen> {
   }
 
   Widget nameText() {
-    return const SizedBox(
+    return  const SizedBox(
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +114,6 @@ class _MypageScreenState extends State<MypageScreen> {
               'name',
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.black87,
               ),
             ),
           ]
@@ -138,25 +136,22 @@ class _MypageScreenState extends State<MypageScreen> {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color:  Colors.black45, // 테두리 색상
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black45 // 라이트 모드일 때
+                  : Colors.white54,
             ),
             borderRadius: BorderRadius.circular(8), // 모서리 둥글게
           ),
           padding: EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.centerLeft, // 텍스트와 아이콘 정렬
-          child: const Row(
+          child:  const Row(
             children: [
-              Icon(
-                Icons.account_circle_outlined,
-                color: Colors.black54,
-                size: 24,
-              ),
+               Icon(Icons.account_circle_outlined, size: 24),
               SizedBox(width: 12), // 아이콘과 텍스트 사이 간격
               Text(
                 '프로필 변경',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black87,
                 ),
               ),
             ],
@@ -172,7 +167,11 @@ class _MypageScreenState extends State<MypageScreen> {
       width: double.infinity,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black45),
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.light
+            ? Colors.black45 // 라이트 모드일 때
+            : Colors.white54,
+        ),
           borderRadius: BorderRadius.circular(8),
         ),
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -185,16 +184,15 @@ class _MypageScreenState extends State<MypageScreen> {
               '다크모드',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.black87,
               ),
             ),
             const Spacer(),
             Switch(
-              value: MyApp.themeNotifier.value == ThemeMode.light,
+              value: MyApp.themeNotifier.value == ThemeMode.dark,
               onChanged: (_isLightMode) {
                 setState(() {
                   MyApp.themeNotifier.value =
-                  _isLightMode ? ThemeMode.light : ThemeMode.dark;
+                  _isLightMode ? ThemeMode.dark : ThemeMode.light;
                 });
               },
             ),
@@ -212,7 +210,9 @@ class _MypageScreenState extends State<MypageScreen> {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color:  Colors.black45, // 테두리 색상
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black45 // 라이트 모드일 때
+                  : Colors.white54,
             ),
             borderRadius: BorderRadius.circular(8), // 모서리 둥글게
           ),
@@ -222,7 +222,6 @@ class _MypageScreenState extends State<MypageScreen> {
             children: [
               Icon(
                 Icons.star_border_rounded,
-                color: Colors.black54,
                 size: 24,
               ),
               SizedBox(width: 12), // 아이콘과 텍스트 사이 간격
@@ -230,7 +229,6 @@ class _MypageScreenState extends State<MypageScreen> {
                 '도서관 리스트',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black87,
                 ),
               ),
             ],
@@ -246,7 +244,9 @@ class _MypageScreenState extends State<MypageScreen> {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color:  Colors.black45, // 테두리 색상
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black45 // 라이트 모드일 때
+                    : Colors.white54,
             ),
             borderRadius: BorderRadius.circular(8), // 모서리 둥글게
           ),
@@ -256,7 +256,6 @@ class _MypageScreenState extends State<MypageScreen> {
             children: [
               Icon(
                 Icons.chat,
-                color: Colors.black54,
                 size: 24,
               ),
               SizedBox(width: 12), // 아이콘과 텍스트 사이 간격
@@ -264,7 +263,6 @@ class _MypageScreenState extends State<MypageScreen> {
                 '문의하기',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black87,
                 ),
               ),
             ],
