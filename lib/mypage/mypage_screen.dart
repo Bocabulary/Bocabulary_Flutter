@@ -6,7 +6,7 @@ import 'package:flutter/src/services/asset_bundle.dart';
 import 'package:flutter/src/painting/image_stream.dart';
 
 
-class MyApp extends StatelessWidget {
+class Mypage extends StatelessWidget {
   static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
   @override
@@ -70,6 +70,7 @@ class _MypageScreenState extends State<MypageScreen> {
       body: SafeArea(
           child: Column(
           children: [
+            SizedBox(height: 40),
             imageProfile(),
             SizedBox(height: 20),
             nameText(),
@@ -190,10 +191,10 @@ class _MypageScreenState extends State<MypageScreen> {
             ),
             const Spacer(),
             Switch(
-              value: MyApp.themeNotifier.value == ThemeMode.dark,
+              value: Mypage.themeNotifier.value == ThemeMode.dark,
               onChanged: (_isLightMode) {
                 setState(() {
-                  MyApp.themeNotifier.value =
+                  Mypage.themeNotifier.value =
                   _isLightMode ? ThemeMode.dark : ThemeMode.light;
                 });
               },
