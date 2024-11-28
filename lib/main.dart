@@ -8,6 +8,7 @@ void main() async {
   await initializeDateFormatting();
   runApp(
     MaterialApp(
+
       home: MypageScreen(),
       // home: HomeScreen(),
     )
