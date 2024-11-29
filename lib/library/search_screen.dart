@@ -28,7 +28,6 @@ class _SearchcreenState extends State<SearchScreen>{
   @override
   void initState() {
     super.initState();
-    filterSiRegion = Map.from(region.dtlRegionCodes);
   }
 
 
@@ -97,7 +96,11 @@ class _SearchcreenState extends State<SearchScreen>{
                                                   height: 50,
                                                   child: TextButton(onPressed: (){
                                                     setState(() {
+                                                      print('${key.substring(0,2)}');
                                                       doRegion=value;
+                                                      filterSiRegion=Map.fromEntries(
+                                                        region.dtlRegionCodes.entries.where((entry)=>entry.key.startsWith("${key.substring(0,2)}"))
+                                                      );
                                                     });
                                                   }, child: Text('$value')),
 
@@ -128,21 +131,21 @@ class _SearchcreenState extends State<SearchScreen>{
                                           child: ListView.separated(
                                               padding: EdgeInsets.all(10),
                                               itemBuilder: (context,index){
-                                                String key=region.dtlRegionCodes.keys.elementAt(index);
-                                                String value=region.dtlRegionCodes[key]!;
+                                                String? key=filterSiRegion?.keys.elementAt(index);
+                                                String? value=filterSiRegion?[key]!;
                                                 return Container(
                                                   padding: EdgeInsets.all(5),
                                                   height: 50,
                                                   child: TextButton(onPressed: (){
                                                     setState(() {
-                                                      siRegion=value;
+                                                      siRegion=value!;
                                                     });
                                                   }, child: Text('$value')),
 
                                                 );
                                               },
                                               separatorBuilder: (context,index)=>Divider(),
-                                              itemCount: region.dtlRegionCodes.length),
+                                              itemCount: filterSiRegion!.length),
                                         ),
                                       );
                                     }
