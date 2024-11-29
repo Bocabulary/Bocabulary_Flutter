@@ -129,7 +129,6 @@ class _SearchcreenState extends State<SearchScreen>{
                                               padding: EdgeInsets.all(10),
                                               itemBuilder: (context,index){
                                                 String key=region.dtlRegionCodes.keys.elementAt(index);
-                                                if(key.)
                                                 String value=region.dtlRegionCodes[key]!;
                                                 return Container(
                                                   padding: EdgeInsets.all(5),
