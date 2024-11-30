@@ -1,6 +1,7 @@
 import 'package:bookapplication/const/config.dart';
 
 class libraryResponseModel{
+
   int? pageNo;
   int? pageSize;
   int? numFound; //전체 검색 결과수
