@@ -1,17 +1,17 @@
 import 'dart:io';
 
+import 'package:bookapplication/user/usercontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/src/services/asset_bundle.dart';
-import 'package:flutter/src/painting/image_stream.dart';
-
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
 
 class Mypage extends StatelessWidget {
   static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
   @override
   Widget build(BuildContext context) {
-    // Listener 추가
+    // ThemeMode가 변경될 때마다 디버그 로그 출력
     themeNotifier.addListener(() {
       debugPrint('ThemeNotifier updated: ${themeNotifier.value}');
     });
@@ -19,35 +19,61 @@ class Mypage extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeNotifier,
       builder: (context, themeMode, child) {
-        return MaterialApp(
-          title: "북어사전",
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
-          debugShowCheckedModeBanner: false,
-          themeMode: themeMode,
-          home: const MypageScreen(),
+        return Consumer<UserController>(
+          builder: (context, userController, child) {
+            // UserController에서 로그인된 사용자 정보 가져오기
+            User? user = userController.user;
+
+            return MaterialApp(
+              title: "북어사전",
+              theme: ThemeData.light(),
+              darkTheme: ThemeData.dark(),
+              debugShowCheckedModeBanner: false,
+              themeMode: themeMode,
+              home: Scaffold(
+                appBar: AppBar(
+                  title: Text('마이페이지'),
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.light_mode),
+                      onPressed: () {
+                        // 테마를 light로 변경
+                        themeNotifier.value = ThemeMode.light;
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.dark_mode),
+                      onPressed: () {
+                        // 테마를 dark로 변경
+                        themeNotifier.value = ThemeMode.dark;
+                      },
+                    ),
+                  ],
+                ),
+                body: user == null // 로그인되지 않으면
+                    ? Center(child: Text('로그인되지 않았습니다.'))
+                    : MypageScreen(user: user), // 로그인된 사용자의 정보를 전달
+              ),
+            );
+          },
         );
       },
     );
   }
 }
 
-class MypageScreen extends StatefulWidget{
-  const MypageScreen({Key? key}) :super(key: key);
+class MypageScreen extends StatefulWidget {
+  final User user;
+
+  const MypageScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<MypageScreen> createState() => _MypageScreenState();
-
-
 }
 
 class _MypageScreenState extends State<MypageScreen> {
   XFile? _imageFile;
-
-  bool _isLightMode = false;
-
   final ImagePicker _picker = ImagePicker();
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,19 +82,22 @@ class _MypageScreenState extends State<MypageScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.local_library)),
-            Text('북어사전'),
-            ]
+            Row(
+              children: [
+                IconButton(onPressed: () {}, icon: Icon(Icons.local_library)),
+                Text('북어사전'),
+              ],
             ),
-
-            IconButton(onPressed: (){}, icon: Icon(Icons.notifications_outlined),color: Colors.black,),
-
-        ],
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.notifications_outlined),
+              color: Colors.black,
+            ),
+          ],
         ),
       ),
       body: SafeArea(
-          child: Column(
+        child: Column(
           children: [
             SizedBox(height: 40),
             imageProfile(),
@@ -80,7 +109,7 @@ class _MypageScreenState extends State<MypageScreen> {
               indent: 24,
               endIndent: 24,
               color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.black45 // 라이트 모드일 때
+                  ? Colors.black45
                   : Colors.white54,
             ),
             imageButton(),
@@ -99,27 +128,28 @@ class _MypageScreenState extends State<MypageScreen> {
   Widget imageProfile() {
     return Center(
       child: CircleAvatar(
-      radius: 80,
-      backgroundImage: _imageFile == null
-        ? AssetImage('assets/image/default_profile.png')
-        : FileImage(File(_imageFile!.path)),
-      )
+        radius: 80,
+        backgroundImage: _imageFile == null
+            ? NetworkImage( '${widget.user.kakaoAccount?.profile?.profileImageUrl}') as ImageProvider
+            : FileImage(File(_imageFile!.path)),
+      ),
     );
   }
 
   Widget nameText() {
-    return  const SizedBox(
+    // 로그인된 사용자의 닉네임을 표시
+    return SizedBox(
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'name',
+              '${widget.user.kakaoAccount?.profile?.nickname}',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
-          ]
+          ],
         ),
       ),
     );
@@ -127,8 +157,8 @@ class _MypageScreenState extends State<MypageScreen> {
 
   Widget imageButton() {
     return SizedBox(
-      height: 60, // 버튼의 높이 설정
-      width: double.infinity, // 버튼을 가로로 꽉 채우기
+      height: 60,
+      width: double.infinity,
       child: InkWell(
         onTap: () {
           showModalBottomSheet(
@@ -140,17 +170,17 @@ class _MypageScreenState extends State<MypageScreen> {
           decoration: BoxDecoration(
             border: Border.all(
               color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.black45 // 라이트 모드일 때
+                  ? Colors.black45
                   : Colors.white54,
             ),
-            borderRadius: BorderRadius.circular(8), // 모서리 둥글게
+            borderRadius: BorderRadius.circular(8),
           ),
           padding: EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.centerLeft, // 텍스트와 아이콘 정렬
-          child:  const Row(
+          alignment: Alignment.centerLeft,
+          child: Row(
             children: [
-               Icon(Icons.account_circle_outlined, size: 24),
-              SizedBox(width: 12), // 아이콘과 텍스트 사이 간격
+              Icon(Icons.account_circle_outlined, size: 24),
+              SizedBox(width: 12),
               Text(
                 '프로필 변경',
                 style: TextStyle(
@@ -172,9 +202,9 @@ class _MypageScreenState extends State<MypageScreen> {
         decoration: BoxDecoration(
           border: Border.all(
             color: Theme.of(context).brightness == Brightness.light
-            ? Colors.black45 // 라이트 모드일 때
-            : Colors.white54,
-        ),
+                ? Colors.black45
+                : Colors.white54,
+          ),
           borderRadius: BorderRadius.circular(8),
         ),
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -205,108 +235,79 @@ class _MypageScreenState extends State<MypageScreen> {
     );
   }
 
-
-  Widget libraryList () {
+  Widget libraryList() {
     return SizedBox(
-        height: 60,
-        width: double.infinity,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.black45 // 라이트 모드일 때
-                  : Colors.white54,
+      height: 60,
+      width: double.infinity,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black45
+                : Colors.white54,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Icon(
+              Icons.star_border_rounded,
+              size: 24,
             ),
-            borderRadius: BorderRadius.circular(8), // 모서리 둥글게
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.centerLeft, // 텍스트와 아이콘 정렬
-          child: const Row(
-            children: [
-              Icon(
-                Icons.star_border_rounded,
-                size: 24,
+            SizedBox(width: 12),
+            Text(
+              '도서관 리스트',
+              style: TextStyle(
+                fontSize: 16,
               ),
-              SizedBox(width: 12), // 아이콘과 텍스트 사이 간격
-              Text(
-                '도서관 리스트',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        )
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget inquiryButton () {
+  Widget inquiryButton() {
     return SizedBox(
-        height: 60,
-        width: double.infinity,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-                color: Theme.of(context).brightness == Brightness.light
-                    ? Colors.black45 // 라이트 모드일 때
-                    : Colors.white54,
+      height: 60,
+      width: double.infinity,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black45
+                : Colors.white54,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Icon(
+              Icons.chat,
+              size: 24,
             ),
-            borderRadius: BorderRadius.circular(8), // 모서리 둥글게
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.centerLeft, // 텍스트와 아이콘 정렬
-          child: const Row(
-            children: [
-              Icon(
-                Icons.chat,
-                size: 24,
+            SizedBox(width: 12),
+            Text(
+              '문의하기',
+              style: TextStyle(
+                fontSize: 16,
               ),
-              SizedBox(width: 12), // 아이콘과 텍스트 사이 간격
-              Text(
-                '문의하기',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        )
+            ),
+          ],
+        ),
+      ),
     );
   }
-
-
-  // Widget nameTextFeild() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       border: const OutlineInputBorder(
-  //         borderSide: BorderSide(
-  //           color: Colors.black45,
-  //         )
-  //       ),
-  //       focusedBorder: OutlineInputBorder(
-  //         borderSide: BorderSide(
-  //           color: Theme.of(context).secondaryHeaderColor,
-  //           width: 2
-  //         ),
-  //       ),
-  //       prefixIcon: Icon(
-  //         Icons.person,
-  //         color: Theme.of(context).primaryColor,
-  //       ),
-  //       labelText: 'Name',
-  //       hintText: 'Input your name'
-  //     ),
-  //   );
-  // }
 
   Widget bottomSheet() {
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 20
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: <Widget>[
           const Text(
@@ -324,37 +325,27 @@ class _MypageScreenState extends State<MypageScreen> {
                 onPressed: () {
                   takePhoto(ImageSource.camera);
                 },
-                // label:const Text('Camera', style: TextStyle(
-                //   fontSize: 20
-                //   ),
-                // ),
-          ),
-
+              ),
               IconButton.outlined(
                 icon: Icon(Icons.photo_library, size: 50),
                 onPressed: () {
                   takePhoto(ImageSource.gallery);
                 },
-                // label: const Text('Gallery', style: TextStyle(
-                //   fontSize: 20
-                // ),),
-              )
-            // )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
+
   takePhoto(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
 
     setState(() {
       if (pickedFile != null) {
-        _imageFile = pickedFile; // XFile을 사용
+        _imageFile = pickedFile;
       }
     });
   }
-
-
 }

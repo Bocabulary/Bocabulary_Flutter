@@ -14,7 +14,7 @@ class KakaoLoginApi {
       } else {
         await api.loginWithKakaoAccount();
       }
-      Navigator.pushReplacementNamed(context, '/main');
+      Navigator.pushReplacementNamed(context, '/mypage');
       return await api.me(); // 사용자 정보를 반환
     } catch (error) {
       print('카카오 로그인 실패: $error');

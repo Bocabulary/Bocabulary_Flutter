@@ -1,5 +1,6 @@
 import 'package:bookapplication/home/home_screen.dart';
 import 'package:bookapplication/login/login_screen.dart';
+import 'package:bookapplication/mypage/mypage_screen.dart';
 import 'package:bookapplication/user/kakaologinapi.dart';
 import 'package:bookapplication/user/usercontroller.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ void main() async {
           ),
         ),
       ],
-      child: const MyApp(), // MultiProvider 아래에 MaterialApp 배치
+      child: const MyApp(),
     ),
   );
   print(await KakaoSdk.origin);
@@ -44,6 +45,18 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginScreen(), // 로그인 페이지
         '/main': (context) => const HomeScreen(), // 메인 페이지
+        '/mypage': (context) {
+          final userController = Provider.of<UserController>(context);
+          final user = userController.user;
+
+          // user가 null일 경우 로그인 화면으로 리디렉션
+          if (user == null) {
+            return const LoginScreen();
+          }
+
+          // user가 null이 아닌 경우에만 MypageScreen으로 이동
+          return MypageScreen(user: user);
+        },
       },
     );
   }
