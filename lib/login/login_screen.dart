@@ -12,21 +12,20 @@ class MyLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => UserController(
-        kakaoLoginApi: KakaoLoginApi(),
-      ),
-      child: const MaterialApp(
-        home: LoginScreen(),
+          kakaoLoginApi: KakaoLoginApi(),
+        ),
+        child: MaterialApp(
+        home: const LoginScreen(),
       ),
     );
   }
 }
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) :super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
-
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -46,13 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget logoTitle () {
+  Widget logoTitle() {
     return Center(
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.local_library, size: 100,
+            Icons.local_library,
+            size: 100,
             color: Colors.brown[600],
           ),
           Text(
@@ -61,20 +60,18 @@ class _LoginScreenState extends State<LoginScreen> {
               fontSize: 40,
             ),
           ),
-        ]
+        ],
       ),
     );
   }
 
-  Widget kakaoLogin () => Padding(
+  Widget kakaoLogin() => Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
-      // 카카오 로그인을 위한 메소드
-        onTap: () {
-          context.read<UserController>().kakaoLogin;
-          KakaoLoginApi().signWithKakao(context); // context 전달
-        },
-        child: Image.asset("assets/image/kakao_login_medium_narrow.png")),
+      onTap: () {
+        context.read<UserController>().kakaoLogin(context);
+      },
+      child: Image.asset("assets/image/kakao_login_medium_narrow.png"),
+    ),
   );
 }
-
