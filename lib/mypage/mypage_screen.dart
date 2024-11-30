@@ -7,7 +7,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 
 class Mypage extends StatelessWidget {
-  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +84,11 @@ class _MypageScreenState extends State<MypageScreen> {
           children: [
             Row(
               children: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.local_library)),
+                IconButton(onPressed: () {
+                  Navigator.pushNamed(context, '/main');
+                }, icon: Icon(Icons.local_library)),
                 Text('북어사전'),
+
               ],
             ),
             IconButton(

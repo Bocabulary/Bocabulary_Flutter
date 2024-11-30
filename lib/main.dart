@@ -39,24 +39,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // 디버그 배너 비활성화
-      initialRoute: '/', // 초기 라우트 설정
-      routes: {
-        '/': (context) => const LoginScreen(), // 로그인 페이지
-        '/main': (context) => const HomeScreen(), // 메인 페이지
-        '/mypage': (context) {
-          final userController = Provider.of<UserController>(context);
-          final user = userController.user;
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: Mypage.themeNotifier,
+        builder: (context, themeMode, child) {
+      return MaterialApp(
+        title: '북어사전',
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: themeMode,
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/', // 초기 라우트 설정
+        routes: {
+          '/': (context) => const LoginScreen(), // 로그인 페이지
+          '/main': (context) => const HomeScreen(), // 메인 페이지
+          '/mypage': (context) {
+            final userController = Provider.of<UserController>(context);
+            final user = userController.user;
 
-          // user가 null일 경우 로그인 화면으로 리디렉션
-          if (user == null) {
-            return const LoginScreen();
+            // user가 null일 경우 로그인 화면으로 리디렉션
+            if (user == null) {
+              return const LoginScreen();
           }
 
           // user가 null이 아닌 경우에만 MypageScreen으로 이동
           return MypageScreen(user: user);
         },
+      },
+      );
       },
     );
   }
