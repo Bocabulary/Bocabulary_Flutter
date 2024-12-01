@@ -215,7 +215,8 @@ class _SearchcreenState extends State<SearchScreen>{
                 SearchResultBanner(count: resultNum),
                 SizedBox(height: 10.0,),
                 Expanded(
-                    child:ListView.builder(
+                    child:libsInfoList?.length!=null?
+                    ListView.builder(
                         itemCount:libsInfoList?.length ,
                         itemBuilder: (context,index){
                           Map<String,dynamic> libInfo=libsInfoList?[index];
@@ -223,7 +224,11 @@ class _SearchcreenState extends State<SearchScreen>{
                             ScheduleCard(libName: '${libInfo['lib']['libName']}', address: '${libInfo['lib']['address']}', tel: '${libInfo['lib']['tel']}', homepage: '${libInfo['lib']['homepage']}', closed: '${libInfo['lib']['closed']}', operationTime: '${libInfo['lib']['operationTime']}');
 
                         }
-                    ),
+                    ): Center(
+                      child: Text('검색결과가 없습니다.'),
+                    )
+
+                   
 
 
                 ),
