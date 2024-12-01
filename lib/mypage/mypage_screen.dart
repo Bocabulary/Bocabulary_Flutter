@@ -12,7 +12,6 @@ class Mypage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ThemeMode가 변경될 때마다 디버그 로그 출력
     themeNotifier.addListener(() {
       debugPrint('ThemeNotifier updated: ${themeNotifier.value}');
     });
@@ -22,7 +21,6 @@ class Mypage extends StatelessWidget {
       builder: (context, themeMode, child) {
         return Consumer<UserController>(
           builder: (context, userController, child) {
-            // UserController에서 로그인된 사용자 정보 가져오기
             User? user = userController.user;
 
             return MaterialApp(
@@ -38,24 +36,21 @@ class Mypage extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.light_mode),
                       onPressed: () {
-                        // 테마를 light로 변경
                         themeNotifier.value = ThemeMode.light;
                       },
                     ),
                     IconButton(
                       icon: Icon(Icons.dark_mode),
                       onPressed: () {
-                        // 테마를 dark로 변경
                         themeNotifier.value = ThemeMode.dark;
                       },
                     ),
                   ],
                 ),
-                body: user == null // 로그인되지 않으면
+                body: user == null
                     ? Center(child: Text('로그인되지 않았습니다.'))
-                    : MypageScreen(user: user), // 로그인된 사용자의 정보를 전달
+                    : MypageScreen(user: user),
 
-                bottomNavigationBar: MenuBottom(),
               ),
             );
           },
@@ -128,6 +123,7 @@ class _MypageScreenState extends State<MypageScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: const MenuBottom(),
     );
   }
 

@@ -12,12 +12,16 @@ class MenuBottom extends StatelessWidget {
             Navigator.pushNamed(context, '/main');
             break;
           case 1:
+            Navigator.pushNamed(context, '/search');
+            break;
+          case 2:
             Navigator.pushNamed(context, '/mypage');
             break;
           default:
         }
       }, items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline_rounded), label: 'search'),
         BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'mypage')
       ],
     );

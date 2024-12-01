@@ -1,4 +1,5 @@
 import 'package:bookapplication/home/home_screen.dart';
+import 'package:bookapplication/library/search_screen.dart';
 import 'package:bookapplication/login/login_screen.dart';
 import 'package:bookapplication/mypage/mypage_screen.dart';
 import 'package:bookapplication/user/kakaologinapi.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const LoginScreen(), // 로그인 페이지
           '/main': (context) => const HomeScreen(), // 메인 페이지
+          '/search': (context) => const SearchScreen(), // 메인 페이지
           '/mypage': (context) {
             final userController = Provider.of<UserController>(context);
             final user = userController.user;
