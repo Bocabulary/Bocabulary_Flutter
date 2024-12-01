@@ -15,11 +15,14 @@ class TodayBanner extends StatelessWidget{
   Widget build(BuildContext context) {
     final textStyle=TextStyle(
       fontWeight: FontWeight.w600,
-      color:Colors.white,
+      color:Colors.black87,
     );
 
     return Container(
-      color: PRIMARY_COLOR,
+       decoration: BoxDecoration(
+         border: Border.all(color: PRIMARY_COLOR),
+
+       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0,vertical: 8.0),
         child: Row(
