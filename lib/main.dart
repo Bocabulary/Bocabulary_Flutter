@@ -4,15 +4,24 @@ import 'package:bookapplication/login/login_screen.dart';
 import 'package:bookapplication/mypage/mypage_screen.dart';
 import 'package:bookapplication/user/kakaologinapi.dart';
 import 'package:bookapplication/user/usercontroller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
+
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Kakao SDK 초기화
   KakaoSdk.init(
