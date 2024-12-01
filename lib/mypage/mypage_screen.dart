@@ -113,13 +113,20 @@ class _MypageScreenState extends State<MypageScreen> {
                   ? Colors.black45
                   : Colors.white54,
             ),
-            imageButton(),
-            SizedBox(height: 20),
-            darkMod(),
-            SizedBox(height: 20),
-            libraryList(),
-            SizedBox(height: 20),
-            inquiryButton(),
+            Expanded(
+                child: Column(
+                  children: [
+
+                    imageButton(),
+                    SizedBox(height: 20),
+                    darkMod(),
+                    SizedBox(height: 20),
+                    //libraryList(),
+                    SizedBox(height: 20),
+                    inquiryButton(),
+
+                  ],
+                )),
           ],
         ),
       ),
