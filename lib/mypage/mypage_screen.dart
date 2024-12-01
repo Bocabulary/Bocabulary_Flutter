@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bookapplication/shard/menubottom.dart';
 import 'package:bookapplication/user/usercontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +54,8 @@ class Mypage extends StatelessWidget {
                 body: user == null // 로그인되지 않으면
                     ? Center(child: Text('로그인되지 않았습니다.'))
                     : MypageScreen(user: user), // 로그인된 사용자의 정보를 전달
+
+                bottomNavigationBar: MenuBottom(),
               ),
             );
           },

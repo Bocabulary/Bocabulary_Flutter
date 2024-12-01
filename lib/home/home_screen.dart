@@ -2,6 +2,7 @@
 import 'package:bookapplication/home/main_calendar.dart';
 import 'package:bookapplication/home/schedule_card.dart';
 import 'package:bookapplication/home/today_banner.dart';
+import 'package:bookapplication/shard/menubottom.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget{
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen>{
           ],
         ),
       ),
+      bottomNavigationBar: MenuBottom(),
     );
   }
 
