@@ -26,7 +26,7 @@ class _todaylibraryState extends State<todaylibrary> {
   @override
   Widget build(BuildContext context) {
 
-    return widget.libList?.length!=0?
+    return widget.libList?.length!=null?
     ListView.builder(
         itemCount:widget.libList?.length ,
         itemBuilder: (context,index){
