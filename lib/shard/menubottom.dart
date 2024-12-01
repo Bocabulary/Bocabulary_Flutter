@@ -21,8 +21,8 @@ class MenuBottom extends StatelessWidget {
         }
       }, items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline_rounded), label: 'search'),
-        BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'mypage')
+        BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline_rounded), label: 'Search'),
+        BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Mypage')
       ],
     );
   }
